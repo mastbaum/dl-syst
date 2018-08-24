@@ -34,7 +34,7 @@ for fname in glob(path):
 
     systs.append((name, e / y * 100))
 
-print 'Fractional error on numu 350 MeV bin:'
+print 'Fractional error on numu 550 MeV bin:'
 for k, v in sorted(systs, key=lambda x: x[1], reverse=True):
     print '%8.5f  %s' % (v, k)
 

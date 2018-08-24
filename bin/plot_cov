@@ -1,0 +1,93 @@
+#!/usr/bin/env python
+
+from glob import glob
+from math import sqrt
+import os
+import sys
+import ROOT
+
+objs = []
+
+def merge_directory(path):
+    nue, num, cov, ecov, mcov = None, None, None, None, None
+
+    for filename in glob(os.path.join(path, 'cov_*.root')):
+        f = ROOT.TFile(filename)
+        objs.append(f)
+
+        nue = f.Get('enu_nue')
+        num = f.Get('enu_num')
+        _cov = f.Get('cov')
+        _cov_nue = f.Get('cov_nue')
+        _cov_num = f.Get('cov_num')
+
+        if cov is None:
+            cov = _cov
+            ecov = _cov_nue
+            mcov = _cov_num
+        else:
+            cov.Add(_cov)
+            ecov.Add(_cov_nue)
+            mcov.Add(_cov_num)
+
+    cor = cov.Clone('cor')
+    for i in range(1, cor.GetNbinsX()+1):
+        for j in range(1, cor.GetNbinsX()+1):
+            vij = cov.GetBinContent(i, j)
+            si = sqrt(cov.GetBinContent(i, i))
+            sj = sqrt(cov.GetBinContent(j, j))
+            cor.SetBinContent(i, j, vij / (si * sj))
+
+    ge = ROOT.TGraphErrors(nue.GetNbinsX())
+    for i in range(nue.GetNbinsX()):
+        ge.SetPoint(i, nue.GetBinCenter(i+1), nue.GetBinContent(i+1))
+        ge.SetPointError(i, nue.GetBinWidth(i+1)/2, sqrt(ecov.GetBinContent(i+1, i+1)))
+
+    gm = ROOT.TGraphErrors(num.GetNbinsX())
+    for i in range(num.GetNbinsX()):
+        gm.SetPoint(i, num.GetBinCenter(i+1), num.GetBinContent(i+1))
+        gm.SetPointError(i, num.GetBinWidth(i+1)/2, sqrt(mcov.GetBinContent(i+1, i+1)))
+
+    return ge, gm, cor
+
+
+def load_file(filename):
+    f = ROOT.TFile(filename)
+    objs.append(f)
+    nue = f.Get('err_nue')
+    num = f.Get('err_num')
+    cor = f.Get('cor')
+    return nue, num, cor
+
+if sys.argv[1] == '-d':
+    nue, num, cor = merge_directory(sys.argv[2])
+else:
+    nue, num, cor = load_file(sys.argv[1])
+
+
+c = ROOT.TCanvas('c', '', 1200, 400)
+c.Divide(3, 1)
+
+c.cd(1)
+nue.SetTitle('1e1p Selection;E_{#nu}^{reco} (MeV);Events (A.U.)')
+nue.SetFillColor(ROOT.kRed-4)
+nue.Draw('ae2')
+nue.GetXaxis().SetRangeUser(0, 1800)
+
+c.cd(2)
+num.SetTitle('1#mu1p Selection;E_{#nu}^{reco} (MeV);Events (A.U.)')
+num.SetFillColor(ROOT.kRed-4)
+num.Draw('ae2')
+num.GetXaxis().SetRangeUser(200, 1200)
+
+print 'numu: E=%1.2f, N=%1.2f, Err=%1.3f%%' % (num.GetX()[3], num.GetY()[3], num.GetEY()[3] / num.GetY()[3] * 100)
+
+c.cd(3)
+ROOT.gStyle.SetOptStat(0)
+cor.SetTitle('Correlations;Energy bin (#nu_{e}, #nu_{#mu});Energy bin (#nu_{e}, #nu_{#mu})')
+cor.Draw('colz')
+
+c.Update()
+
+raw_input()
+

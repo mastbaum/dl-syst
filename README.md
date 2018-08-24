@@ -27,7 +27,7 @@ run
 
     $ budget DIRNAME
 
-to print out the ranked fractional errors in the 350 MeV bin of the numu
+to print out the ranked fractional errors in the 550 MeV bin of the numu
 Ereco distribution, as a measure of what uncertainties are dominant.
 
 Quick Start
