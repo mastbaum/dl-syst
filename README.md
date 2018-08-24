@@ -32,7 +32,7 @@ Ereco distribution, as a measure of what uncertainties are dominant.
 
 Quick Start
 -----------
-To run the chain end to end, source `env.sh`, then run:
+To run the chain end to end, source `env.sh`, build with `make`, then run:
 
     $ run_treereader_syst.sh
 
