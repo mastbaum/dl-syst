@@ -1,0 +1,71 @@
+#include "treereader_base.fcl"
+
+# Do 1000 variations for a subset of GENIE parameters.
+
+physics.producers.mcweight.genie_qema.number_of_multisims: 1000
+physics.producers.mcweight.genie_qevec.number_of_multisims: 1000
+physics.producers.mcweight.genie_ncelAxial.number_of_multisims: 1000
+physics.producers.mcweight.genie_ncelEta.number_of_multisims: 1000
+physics.producers.mcweight.genie_ccresAxial.number_of_multisims: 1000
+physics.producers.mcweight.genie_ccresVector.number_of_multisims: 1000
+physics.producers.mcweight.genie_ncresAxial.number_of_multisims: 1000
+physics.producers.mcweight.genie_ncresVector.number_of_multisims: 1000
+physics.producers.mcweight.genie_cohMA.number_of_multisims: 1000
+physics.producers.mcweight.genie_cohR0.number_of_multisims: 1000
+physics.producers.mcweight.genie_NonResRvp1pi.number_of_multisims: 1000
+physics.producers.mcweight.genie_NonResRvbarp1pi.number_of_multisims: 1000
+physics.producers.mcweight.genie_NonResRvp2pi.number_of_multisims: 1000
+physics.producers.mcweight.genie_NonResRvbarp2pi.number_of_multisims: 1000
+physics.producers.mcweight.genie_ResDecayGamma.number_of_multisims: 1000
+physics.producers.mcweight.genie_ResDecayEta.number_of_multisims: 1000
+physics.producers.mcweight.genie_ResDecayTheta.number_of_multisims: 1000
+physics.producers.mcweight.genie_NC.number_of_multisims: 1000
+physics.producers.mcweight.genie_DISAth.number_of_multisims: 1000
+physics.producers.mcweight.genie_DISBth.number_of_multisims: 1000
+physics.producers.mcweight.genie_DISCv1u.number_of_multisims: 1000
+physics.producers.mcweight.genie_DISCv2u.number_of_multisims: 1000
+physics.producers.mcweight.genie_AGKYxF.number_of_multisims: 1000
+physics.producers.mcweight.genie_AGKYpT.number_of_multisims: 1000
+physics.producers.mcweight.genie_FormZone.number_of_multisims: 1000
+physics.producers.mcweight.genie_FermiGasModelKf.number_of_multisims: 1000
+physics.producers.mcweight.genie_FermiGasModelSf.number_of_multisims: 1000
+physics.producers.mcweight.genie_IntraNukeNmfp.number_of_multisims: 1000
+physics.producers.mcweight.genie_IntraNukeNcex.number_of_multisims: 1000
+physics.producers.mcweight.genie_IntraNukeNel.number_of_multisims: 1000
+physics.producers.mcweight.genie_IntraNukeNinel.number_of_multisims: 1000
+physics.producers.mcweight.genie_IntraNukeNabs.number_of_multisims: 1000
+physics.producers.mcweight.genie_IntraNukeNpi.number_of_multisims: 1000
+physics.producers.mcweight.genie_IntraNukePImfp.number_of_multisims: 1000
+physics.producers.mcweight.genie_IntraNukePIcex.number_of_multisims: 1000
+physics.producers.mcweight.genie_IntraNukePIel.number_of_multisims: 1000
+physics.producers.mcweight.genie_IntraNukePIinel.number_of_multisims: 1000
+physics.producers.mcweight.genie_IntraNukePIabs.number_of_multisims: 1000
+physics.producers.mcweight.genie_IntraNukePIpi.number_of_multisims: 1000
+
+# Enable dominant parameters + all FSI, and all beam
+physics.producers.mcweight.weight_functions: [
+  @sequence::treereader_eventweight.weight_functions_beam,
+  genie_qema, 
+  genie_ccresAxial,
+  genie_ccresVector,
+  genie_ncelAxial,
+  genie_ncresAxial,
+  genie_FermiGasModelKf,
+  genie_NC,
+  genie_ResDecayTheta,
+  genie_IntraNukeNmfp,
+  genie_IntraNukeNcex,
+  genie_IntraNukeNel,
+  genie_IntraNukeNinel,
+  genie_IntraNukeNabs,
+  genie_IntraNukeNpi,
+  genie_IntraNukePImfp,
+  genie_IntraNukePIcex,
+  genie_IntraNukePIel,
+  genie_IntraNukePIinel,
+  genie_IntraNukePIabs,
+  genie_IntraNukePIpi
+]
+ 
+outputs.out1.fileName: "%ifb_wgh_some.root"
+
